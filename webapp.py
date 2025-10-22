@@ -7,60 +7,60 @@ import json
 app = Flask(__name__)
 
 @app.route('/')
-def home():
-    states = get_state_options()
-    #print(states)
-    return render_template('home.html', state_options=states)
+def popularity():
+    artists = get_artist_options()
+    #print(artists)
+    return render_template('popularity.html', artist_options=artists)
 
 @app.route('/showFact')
 def render_fact():
-    states = get_state_options()
-    state = request.args.get('state')
-    county = county_most_under_18(state)
-    county2 = county_most_population(state)
-    fact = "In " + state + ", the county with the highest percentage of under 18 year olds is " + county + "."
-    fact2 = "In " + state + ", the county with the highest population is " + county2 + "."
-    return render_template('home.html', state_options=states, funFact=fact, funFact2=fact2)
+    artists = get_artist_options()
+    artist = request.args.get('song')
+    # county = county_most_under_18(artist)
+    # county2 = county_most_population(artist)
+    fact = artist
+    fact2 = artist
+    return render_template('popularity.html', artist_options=artists, funFact=fact, funFact2=fact2)
     
-def get_state_options():
-    """Return the html code for the drop down menu.  Each option is a state abbreviation from the demographic data."""
-    with open('demographics.json') as demographics_data:
-        counties = json.load(demographics_data)
-    states=[]
+def get_artist_options():
+    """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
+    with open('music.json') as music_data:
+        counties = json.load(music_data)
+    artists=[]
     for c in counties:
-        if c["State"] not in states:
-            states.append(c["State"])
+        if c["artist"]["name"] not in artists:
+            artists.append(c["artist"]["name"])
     options=""
-    for s in states:
+    for s in artists:
         options += Markup("<option value=\"" + s + "\">" + s + "</option>") #Use Markup so <, >, " are not escaped lt, gt, etc.
     return options
 
-def county_most_under_18(state):
-    """Return the name of a county in the given state with the highest percent of under 18 year olds."""
-    with open('demographics.json') as demographics_data:
-        counties = json.load(demographics_data)
-    highest=0
-    county = ""
-    for c in counties:
-        if c["State"] == state:
-            if c["Age"]["Percent Under 18 Years"] > highest:
-                highest = c["Age"]["Percent Under 18 Years"]
-                county = c["County"]
-    return county
+# def county_most_under_18(artist):
+    # """Return the name of a county in the given artist with the highest percent of under 18 year olds."""
+    # with open('music.json') as music_data:
+        # counties = json.load(music_data)
+    # highest=0
+    # county = ""
+    # for c in counties:
+        # if c["artist"]["name"] == artist:
+            # if c["hotttnesss"] > highest:
+                # highest = c["hotttnesss"]
+                # county = c["artist"]["name"]
+    # return county
     
     
-def county_most_population(state):
-    """Return the name of a county in the given state with the highest percent of under 18 year olds."""
-    with open('demographics.json') as demographics_data:
-        counties = json.load(demographics_data)
-    highest=0
-    county2 = ""
-    for c in counties:
-        if c["State"] == state:
-            if c["Population"]["2014 Population"] > highest:
-                highest = c["Population"]["2014 Population"]
-                county2 = c["County"]
-    return county2
+# def county_most_population(artist):
+    # """Return the name of a county in the given artist with the highest percent of under 18 year olds."""
+    # with open('music.json') as music_data:
+        # counties = json.load(music_data)
+    # highest=0
+    # county2 = ""
+    # for c in counties:
+        # if c["song"] == artist:
+            # if c["hotttnesss"] > highest:
+                # highest = c["hotttnesss"]
+                # county2 = c["artist"]
+    # return county2
 
 def is_localhost():
     """ Determines if app is running on localhost or not
@@ -72,4 +72,4 @@ def is_localhost():
 
 
 if __name__ == '__main__':
-    app.run(debug=False) # change to False when running in production
+    app.run(debug=True) # change to False when running in production

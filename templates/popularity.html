@@ -39,12 +39,12 @@
       </div>
     </nav>
 
-     <form action="/showFact">
-          <select name="state"> <!-- add onchange="this.form.submit()" to submit/update the form when an option is selected.  Usefull for then displaying county options. -->
-            {{ state_options }}
+    <form action="/showFact">
+          <select name="artist"> <!-- add onchange="this.form.submit()" to submit/update the form when an option is selected.  Usefull for then displaying county options. -->
+            {{ artist_options }}
           </select>
           <br><br>
-          <input type="submit" value="Get a fun fact!">
+          <input type="submit" value="Select Artist">
         </form>
         <div id="funFact">
             <p>{{ funFact }}</p>
