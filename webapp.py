@@ -7,6 +7,18 @@ import json
 app = Flask(__name__)
 
 @app.route('/')
+def home():
+   
+    #print(artists)
+    return render_template('index.html')
+
+@app.route('/data')
+def data():
+   
+    
+    return render_template('data.html')
+    
+@app.route('/popularity')
 def popularity():
    
     artists = get_artist_options()
