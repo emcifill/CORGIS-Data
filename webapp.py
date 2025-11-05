@@ -12,30 +12,31 @@ def home():
     #print(artists)
     return render_template('index.html')
 
-@app.route('/data')
-def data():
-   
-    
-    return render_template('data.html')
-    
 @app.route('/popularity')
 def popularity():
    
+    return render_template('popularity.html')
+    
+@app.route('/data')
+def data():
+   
     artists = get_artist_options()
     #print(artists)
-    return render_template('popularity.html', artist_options=artists)
+    return render_template('data.html', artist_options=artists)
 
 @app.route('/showFact')
 def render_fact():
     artists = get_artist_options()
     artist = request.args.get('artist')
     artisthotttnessss = get_artist_hotttnesss(artist)
-    
+    artistterms = get_artist_terms(artist)
     # county = county_most_under_18(artist)
     # county2 = county_most_population(artist)
-    fact = artist + " popularity is"
-    fact2 = artisthotttnessss
-    return render_template('popularity.html', artist_options=artists, funFact=fact, funFact2=fact2)
+    fact = artist + " data"
+    fact2 = "popularity: " + str(artisthotttnessss)
+    fact3 = "genre: " + artistterms
+    return render_template('data.html', artist_options=artists, funFact=fact, funFact2=fact2, funFact3=fact3)
+    
     
 def get_artist_options():
     """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
@@ -59,13 +60,21 @@ def get_artist_hotttnesss(name):
         if c["artist"]["name"] == name:
            return c["artist"]["hotttnesss"]
 
+def get_artist_terms(name):
+    """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
+    with open('music.json') as music_data:
+        counties = json.load(music_data)
+   
+    for c in counties:
+        if c["artist"]["name"] == name:
+           return c["artist"]["terms"]
 
 
 def artistdata():
    
     artists2 = get_artist_options2()
     #print(artists)
-    return render_template('data.html', artist_options2=artists2)
+    return render_template('popularity.html', artist_options2=artists2)
 
 @app.route('/showFact')
 def render_fact2():
@@ -75,9 +84,9 @@ def render_fact2():
     
     # county = county_most_under_18(artist)
     # county2 = county_most_population(artist)
-    fact3 = artist2 + " popularity is"
+    fact3 = artist2 + " data is"
     fact4 = artisthotttnessss2
-    return render_template('data.html', artist_options2=artists2, funFact3=fact3, funFact4=fact4)
+    return render_template('popularity.html', artist_options2=artists2, funFact3=fact3, funFact4=fact4)
     
 def get_artist_options2():
     """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
