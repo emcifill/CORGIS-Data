@@ -14,8 +14,10 @@ def home():
 
 @app.route('/popularity')
 def popularity():
-   
-    return render_template('popularity.html')
+    
+    genres = get_genre_options()
+    #print(artists)
+    return render_template('popularity.html', genre_options=genres)
     
 @app.route('/data')
 def data():
@@ -70,45 +72,38 @@ def get_artist_terms(name):
            return c["artist"]["terms"]
 
 
-def artistdata():
-   
-    artists2 = get_artist_options2()
-    #print(artists)
-    return render_template('popularity.html', artist_options2=artists2)
-
-@app.route('/showFact')
+@app.route('/showData')
 def render_fact2():
-    artists2 = get_artist_options2()
-    artist2 = request.args.get2('artist')
-    artisthotttnessss2 = get_artist_hotttnesss2(artist2)
+    genres = get_genre_options()
+    musicgenre = request.args.get('genre')
+    popularartist = get_most_popularartist(musicgenre)
     
     # county = county_most_under_18(artist)
     # county2 = county_most_population(artist)
-    fact3 = artist2 + " data is"
-    fact4 = artisthotttnessss2
-    return render_template('popularity.html', artist_options2=artists2, funFact3=fact3, funFact4=fact4)
+    datafact = "most popular " + musicgenre + " artist is " + str(popularartist)
+    return render_template('popularity.html', genre_options=genres, ArtistData=datafact)
     
-def get_artist_options2():
+def get_genre_options():
     """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
-    with open('music.json') as music_data2:
-        counties2 = json.load(music_data2)
-    artists2=[]
+    with open('music.json') as genre_data:
+        counties2 = json.load(genre_data)
+    genres=[]
     for c in counties2:
-        if c["artist"]["name"] not in artists2:
-            artists2.append(c["artist"]["name"])
+        if c["artist"]["terms"] not in genres:
+            genres.append(c["artist"]["terms"])
     options2=""
-    for s in artists2:
+    for s in genres:
         options2 += Markup("<option value=\"" + s + "\">" + s + "</option>") #Use Markup so <, >, " are not escaped lt, gt, etc.
     return options2
 
-def get_artist_hotttnesss2(name2):
+def get_most_popularartist(musicgenre):
     """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
-    with open('music.json') as music_data2:
-        counties2 = json.load(music_data2)
+    with open('music.json') as genre_data:
+        counties2 = json.load(genre_data)
    
     for c in counties2:
-        if c["artist"]["name"] == name2:
-           return c["artist"]["hotttnesss"]
+        if c["artist"]["terms"] == musicgenre:
+           return c["artist"]["name"]
            
 # def county_most_under_18(artist):
     # """Return the name of a county in the given artist with the highest percent of under 18 year olds."""
