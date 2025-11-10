@@ -100,10 +100,14 @@ def get_most_popularartist(musicgenre):
     """Return the html code for the drop down menu.  Each option is a artist abbreviation from the demographic data."""
     with open('music.json') as genre_data:
         counties2 = json.load(genre_data)
-   
+    highest=0
+    popularartist = ""
     for c in counties2:
         if c["artist"]["terms"] == musicgenre:
-           return c["artist"]["name"]
+            if c["artist"]["hotttnesss"] > highest:
+                highest = c["artist"]["hotttnesss"]
+                popularartist = c["artist"]["name"]
+    return popularartist
            
 # def county_most_under_18(artist):
     # """Return the name of a county in the given artist with the highest percent of under 18 year olds."""
